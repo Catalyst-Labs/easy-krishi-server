@@ -1,5 +1,22 @@
 version: '3'
 services:
-	easykrishi_server:
-		
-		
+  easykrishi_server:
+    build: .
+    entrypoint: bash /scripts/start.sh
+    image: varunbhat/easykrishi_server
+    container_name: easykrishi_server
+    depends_on:
+      - easykrishi_database
+    volumes:
+      - $PRJ_HOME/easykrishi_server:/server
+      - $PRJ_HOME/docker_scripts:/scripts
+
+  easykrishi_database:
+    image: mysql:5.7.21
+    container_name: easykrishi_database
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: easykrishi
+    volumes:
+      - $PWD/mysql_data:/var/lib/mysql
+
