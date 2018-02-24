@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+{% load admin_static %}
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>EasyKrishi Dashboard</title>   
+    {% include "app/dist/html/base.html" %}
+    <script src="https://maps.google.com/maps/api/js?key=AIzaSyAFT4yag-g8Z0BGr8cGkfApcIL569tTIH8" type="text/javascript"></script>
+      <script src="https://jawj.github.io/OverlappingMarkerSpiderfier/bin/oms.min.js"></script>
+
+</head>
+
+<body class="flat-blue">
+<input id="location_data_id" type="hidden" value="{{json_location_data}}"/>
+    <div class="app-container">
+        <div class="row content-container">   
+                         
+                {% include "app/dist/html/nav.html" %}
+            
+            <!-- Main Content -->
+            <div class="container-fluid">
+                <div class="side-body padding-top">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <a>
+                                <div class="card green summary-inline">
+                                    <div class="card-body">
+                                        <i class="icon fa fa-user fa-4x pull-right"></i>
+                                        <div class="content">
+                                            <div class="title">{{ total }}</div>
+                                            <div class="sub-title">Total Farmers</div>
+                                        </div>
+                                        <div class="clear-both"></div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <a>
+                                <div class="card green summary-inline">
+                                    <div class="card-body">
+                                        <i class="icon fa fa-user fa-4x pull-right"></i>
+                                        <div class="content">
+                                            <div class="title">{{ today }}</div>
+                                            <div class="sub-title">Today Registered Farmers</div>
+                                        </div>
+                                        <div class="clear-both"></div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="row  no-margin-bottom">
+                        <div class="col-sm-9 col-xs-12">
+                            <div id="googleMap" style="width:100%;height:400px;"></div>
+                        </div>
+                        <div class="col-sm-3 col-xs-12">
+                                        <table class="table" style="width:100%;">
+                                  {% if state_data  %}                
+                                 <thead><tr><th>State Name</th><th>Total People</th></tr></thead>
+                                 <tbody>
+                                {% for obj in state_query %}
+                                 <tr>
+                                 <td>
+                                  <a href="/user/view/hierarchical_details/?key=state&state={{ obj.people__state_name }}" id="bootstrap" data-original-title="" title="">{{ obj.people__state_name }}</a>
+                                </td>
+                                <td>
+                                {{ obj.dcount }}</td>
+                                  </td>
+                              </tr>
+                              {% endfor %}
+                              {% endif %}
+                                {% if district_data  %} 
+
+                                 <thead><tr><th>District Name</th><th>Total People</th></tr></thead>
+                                 <tbody>
+                                {% for obj in district_query %}
+                                 <tr>
+                                 <td>
+                                  <a href="/user/view/hierarchical_details/?key=district&district={{ obj.people__district }}" id="bootstrap" data-original-title="" title="">{{ obj.people__district }}</a>
+                                </td>
+                                <td>
+                                {{ obj.dcount }}</td>
+                                  </td>
+                              </tr>
+                              {% endfor %}
+                              {% endif %}
+                                                  {% if mandal_data  %} 
+
+                                 <thead><tr><th>Mandal Name</th><th>Total People</th></tr></thead>
+                                 <tbody>
+                                {% for obj in mandal_query %}
+                                 <tr>
+                                 <td>
+                                  <a href="/user/view/hierarchical_details/?key=mandal&mandal={{ obj.people__sub_district_or_mandal }}" id="bootstrap" data-original-title="" title="">{{ obj.people__sub_district_or_mandal }}</a>
+                                </td>
+                                <td>
+                                {{ obj.dcount }}</td>
+                                  </td>
+                              </tr>
+                              {% endfor %}
+                              {% endif %}
+                                                  {% if village_user_data  %} 
+
+                                 <thead><tr><th>Village Name</th><th>Total People</th></tr></thead>
+                                 <tbody>
+                                {% for obj in village_query %}
+                                 <tr>
+                                 <td>
+                                  <a href="/user/view/hierarchical_details/?key=village&village={{ obj.people__village }}" id="bootstrap" data-original-title="" title="">
+                                 {{ obj.people__village }}</a>
+                                </td>
+                                <td>
+                                {{ obj.dcount }}</td>
+                                  </td>
+                              </tr>
+                              {% endfor %}
+                              {% endif %}
+                                {% if village_user %} 
+
+                                 <thead><tr><th>Total People</th><th>Today Add People</th></tr></thead>
+                                 <tbody>
+
+                                 <tr>
+                                 <td>
+                                 {{ village_data.total_count }}</a>
+                                </td>
+                                <td>
+                                {{ village_data.today_user_count }}</td>
+                                  </td>
+                              </tr>
+                             
+                              {% endif %}
+                           </tbody>
+                           </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="app-footer">
+            <div class="wrapper">
+                 
+            </div>
+        </footer>
+           
+            <script type="text/javascript">
+
+var  js_location_data = document.getElementById('location_data_id').value;
+var locations = jQuery.parseJSON(js_location_data);
+console.log(locations);
+if(locations.length != 0)
+{
+        var map = new google.maps.Map(document.getElementById('googleMap'), {
+      zoom: 3,
+      // center: new google.maps.LatLng(-33.92, 151.25),
+      center: new google.maps.LatLng(locations[0]['latitude'], locations[0]['longitude']),
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    });
+        oms = new OverlappingMarkerSpiderfier(map,
+        {markersWontMove: true, markersWontHide: true, keepSpiderfied: true, circleSpiralSwitchover: 40 });
+    var infowindow = new google.maps.InfoWindow();
+    var marker, i;
+
+    oms.addListener('click', function(marker) {
+        //console.log(marker)
+        //infowindow.setContent(marker.desc);
+        infowindow.setContent(marker.location_data['first_name']+','+marker.location_data['mobile_number']);
+
+        infowindow.open(map, marker);
+      });
+    var bounds = new google.maps.LatLngBounds();
+    for (i = 0; i < locations.length; i++) { 
+        var loc = new google.maps.LatLng(locations[i]['latitude'], locations[i]['longitude']);
+        bounds.extend(loc); 
+       var marker = new google.maps.Marker({
+          position: new google.maps.LatLng(locations[i]['latitude'], locations[i]['longitude']),
+          map: map,
+
+
+          location_data:locations[i]
+        });
+    oms.addMarker(marker);
+    }
+}
+else
+{
+      var map = new google.maps.Map(document.getElementById('googleMap'), {
+      zoom: 12,
+      // center: new google.maps.LatLng(-33.92, 151.25),
+      center: new google.maps.LatLng(12.9716, 77.5946), //default location for bangalore
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    });
+  console.log("No data for location");
+}
+  </script>
+</body>
+
+</html>

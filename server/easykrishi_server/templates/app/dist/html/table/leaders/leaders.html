@@ -1,0 +1,174 @@
+<!DOCTYPE html> 
+
+{% load admin_static %}
+{% load static %}
+{% load table_tags %}
+<html>
+
+<head>
+    {% include "app/dist/html/base.html" %}
+</head>
+
+<body class="flat-blue" onload="dataCount()">
+    <div class="app-container">
+        <div class="row content-container">
+            <nav class="navbar navbar-default navbar-fixed-top navbar-top">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-expand-toggle">
+                            <i class="fa fa-bars icon"></i>
+                        </button>
+                        <ol class="breadcrumb navbar-breadcrumb">
+                            <li>Leaders List</li>
+                        </ol>
+                        <button type="button" class="navbar-right-expand-toggle pull-right visible-xs">
+                            <i class="fa fa-th icon"></i>
+                        </button>
+                    </div>
+                    <ul class="nav navbar-nav navbar-right">
+                        <button type="button" class="navbar-right-expand-toggle pull-right visible-xs">
+                            <i class="fa fa-times icon"></i>
+                        </button>
+                        <li class="dropdown profile">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Welcome {{ request.user.get_username }} <span class="caret"></span></a>
+                            <ul class="dropdown-menu animated fadeInDown profile-info">
+                                <li><a href="/user/view/change-password/"><i class="fa fa-fw fa-key text-info"></i> Change Password</a></li>
+                                {% if request.user.is_superuser %}
+                                <li><a href="/admin/"><i class="fa fa-fw text-info"></i> Admin Dashboard</a></li>
+                                {% endif %}
+                                <li class="divider"></li>
+                                <li><a href="/logout/"><i class="fa fa-fw fa-power-off text-danger"></i> Logout</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+<div class="side-menu sidebar-inverse">
+<nav class="navbar navbar-default" role="navigation">
+                    <div class="side-menu-container">
+                        <div class="navbar-header">
+                            <a class="navbar-brand" href="#">
+                                <div class="icon fa "><img src="https://{{request.META.HTTP_HOST}}/images/logo.png" width="30px" height="30px" style="margin-top: -10px;"></div>
+                                <div class="title">EasyKrishi</div>
+                            </a>
+                            <button type="button" class="navbar-expand-toggle pull-right visible-xs">
+                                <i class="fa fa-times icon"></i>
+                            </button>
+                        </div>
+                        <ul class="nav navbar-nav">
+                            <li>
+                                <a href="/user/view/home">
+                                    <span class="icon fa fa-home"></span><span class="title">Dashboard</span>
+                                </a>
+                            </li>
+                            <li class="panel panel-default dropdown active">
+                                <a data-toggle="collapse" href="#dropdown-table">
+                                    <span class="icon fa fa-table"></span><span class="title">Table</span>
+                                </a>
+                                <!-- Dropdown level 1 -->
+                                <div id="dropdown-table" class="panel-collapse collapse">
+                                    <div class="panel-body">
+                                        <ul class="nav navbar-nav">
+                                            <!-- <li><a href="table/table.html">Table</a>
+                                            </li>
+                                            <li><a href="table/datatable.html">Datatable</a>
+                                            </li> -->
+                                            <li ><a href="/groups/view/group-list">Groups</a></li>  
+                                            <li class="active"><a href="/groups/view/leaders-list/">Group Leaders</a></li>
+                                            <li><a href="/user/view/people-list/">People/Contacts</a></li>
+                                            <li ><a href="/groups/view/product-buy-list/">BuyProducts</a></li>
+                                            <li><a href="/groups/view/product-sell-list/">SellProducts</a></li> 
+                                        </ul>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- /.navbar-collapse -->
+                </nav></div>
+            <!-- Main Content -->
+            <div class="container-fluid">
+                <div class="side-body padding-top">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h2 class="text-primary" style="color:#0aa89e;">Group Leaders List<a href="/user/view/download/?page=leader" class="btn btn-info btn-sm" style="background-color:#0aa89e;border-radius:50%;border:none;" id="download">
+                            <i class="fa fa-download"></i>
+                                <!-- <span class="glyphicon glyphicon-download"></span> -->
+                            </a>
+                            </h2>
+                            <input id="download_data_id" type="hidden" value="{{info_data}}" />
+                            <script type="text/javascript">
+                            var download_data = document.getElementById('download_data_id').value;
+                            
+                            if (download_data.length < 3) {
+                                element = document.getElementById('download');
+                                element.style.display = "none";
+                            }
+                            </script>
+                            <div class="card usrSellLst" style="margin: 2px 0 0 0">
+                              <div class="card-body" style="margin: 2px 0 0 0">
+                                  {% render_table leader_list_data %}
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <footer class="app-footer">
+            <div class="wrapper">
+                <span class="pull-right">2.1 <a href="#"><i class="fa fa-long-arrow-up"></i></a></span> © 2015 Copyright.
+            </div>
+        </footer> -->    
+        <script type="text/javascript">
+            // if (matchMedia) {
+            //   // var mq = window.matchMedia("(min-width: 500px)");
+            //   // mq.addListener(WidthChange);
+            //   // WidthChange(mq);
+            //   dataCount();
+            // }
+        function dataCount(){
+            var col_count = $(".usrSellLst .dataTables_scrollHead .datatable thead").find('.countable > th').length;
+                var table_width = col_count *200;
+                // $('.datatable').css('width',table_width);
+                if(window.matchMedia("(min-width: 769px)").matches){
+                    if(col_count < 7){
+                        $('.datatable').css('width','100%');
+                    }else{
+                        $('.datatable').css('width',table_width);
+                    }
+
+                }else if(window.matchMedia("(min-width: 481px) and (max-width: 768px)").matches){
+                    if(col_count < 4 ){
+                        $('.datatable').css('width','100%');
+                    }else{
+                        $('.datatable').css('width',table_width);
+                    }
+
+                }else if(window.matchMedia("(max-width: 480px)").matches){
+                    if(col_count < 3){
+                        $('.datatable').css('width','100%');
+                    }else{
+                        $('.datatable').css('width',table_width);
+                    }
+                }
+                var arr =[];
+                $(".usrSellLst .dataTables_scrollHead .datatable thead .countable > th").each(function(){ 
+                    arr.push($(this).context.clientWidth);   
+                }) 
+                
+                var i =0;
+                $(".usrSellLst .dataTables_scrollBody .datatable thead .countable > th").each(function(){ 
+
+                    $(this).context.clientWidth =  arr[i]+3;  
+                    $(this).context.scrollWidth=  arr[i]+3;
+                     
+                    i++;
+                })
+                $('.sorting_asc').click();
+        }
+
+        </script>
+</body>
+
+</html>

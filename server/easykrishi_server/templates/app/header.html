@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+{% load admin_static %}
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>EasyKrishi Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">    <!-- Le styles -->
+   
+    
+    
+  </head>
+
+  <body>
+    {% include "app/base.html" %}
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          
+          <a class="brand" href="#">EasyKrishi</a>
+          <div class="">
+            <span class="pull-right" style="padding-top:10px;">
+            <a href="#" class="navbar-link">Welcome {{ request.user.get_username }}</a>
+            /<a href="/user/view/change-password/" class="navbar-link"><i ></i>Change Password</a>/<a href="/logout/" class="navbar-link"><i ></i>Log Out </a> </span>          
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

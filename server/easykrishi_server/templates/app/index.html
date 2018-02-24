@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+{% load admin_static %}
+{% load i18n %}
+<html ang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>EasyKrishi | Sign In Page</title>
+    <link rel="shortcut icon" href="http://{{request.META.HTTP_HOST}}/images/easy_favicon.ico">
+    <link href="{% static "app/css/bootstrap.min.css" %}" rel="stylesheet">
+    <link href="{% static "app/css/main.css" %}" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="{% static "admin/css/base.css" %}" /> -->
+    
+<!-- BEGIN STYLESHEETS -->
+<link href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,300,400,600,700,800" rel="stylesheet" type="text/css">
+<link type="text/css" rel="stylesheet" href="{% static "design/css/bootstrap.css" %}">
+<link type="text/css" rel="stylesheet" href="{% static "design/css/materialadmin.css" %}">
+<link rel="stylesheet" href="{% static "design/css/font-awesome.min.css"%} "><!--Font Awesome Icon Font-->
+<link type="text/css" rel="stylesheet" href="{% static "design/css/material-design-iconic-font.min.css" %}">
+    <style type="text/css">
+        #success-area .flash_message {
+                                    padding: 1px;
+                                    color: green;
+                                    font-size: 13px;
+                                }
+        #errors-area .flash_message {
+                            padding: 1px;
+                            color: red;
+                            font-size: 14px;
+                        }
+        .errornote{
+            padding: 1px;
+                            color: red;
+                            font-size: 14px;
+        }
+    </style>
+   
+</head>
+
+<body style="background: #f1f1f1;">    
+    <div class="container">
+        <div class="text-center sign-logo"><img src="{% static "app/img/logo.png" %}" width="auto" height="90" alt=""></div>
+        <form id="form-id" class="form-signin form floating-label form-validate" action="" accept-charset="utf-8" method="post" >
+        {% csrf_token %} 
+
+            <h2>Login for EasyKrishi</h2>
+            <div id="success-area"></div>
+            <div id="errors-area"></div>
+            {% if form.errors and not form.non_field_errors %}
+                <p class="errornote">
+                    {% if form.errors.items|length == 1 %}{% trans "Please correct the error below." %}{% else %}{% trans "Please correct the errors below." %}{% endif %}
+                </p>
+            {% endif %}
+            {% if form.non_field_errors %}
+                {% for error in form.non_field_errors %}
+                    <p class="errornote">
+                        {{ error }}
+                    </p>
+                {% endfor %}
+            {% endif %}
+            <div class="form-group">
+            {{ form.username.errors }}
+                <input type="text" class="form-control" id="input_mobile_number" name="username" required>
+                <label for="id_username">Username</label>
+            </div>          
+            
+  <div class="form-group">
+  {{ form.password.errors }}
+    <input type="password" class="form-control" id="inputPassword" name="password" required>
+    <label for="id_password">Password</label>
+</div>
+<div class="row">
+                                <div class="col-xs-12 text-left">
+                                    <div class="checkbox checkbox-inline checkbox-styled">
+                                        <label>
+                                            <input type="checkbox" name="remember-me"> <span>Remember me</span>
+                                        </label>
+                                    </div>
+                                </div><!--end .col -->
+                               <!--  <div class="col-xs-6 text-right">
+                                    <button class="btn btn-primary btn-raised" type="submit">Login</button>
+                                </div> --><!--end .col -->
+                            </div>
+ 
+  <div class="submit-row">
+    <label>&nbsp;</label><input class="btn btn-lg btn-primary btn-info btn-block" style="background:#333;" type="submit" value="Sign In" />
+  </div>
+            <br>
+            <!--<button id="reset" type="button" name='reset'>Get External Content</button> --> 
+            <a id="reset" name='reset' href="#"><i>Reset Password</i></a>
+        </form>
+    </div>
+    <script src="{% static "app/js/jquery-1.11.3.min.js" %}"></script>    
+    <script src="{% static "app/js/bootstrap.min.js" %}"></script>
+    <script src="{% static "app/js/main.js" %}"></script>
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script> -->
+<script src="{% static "design/js/jquery.nanoscroller.js" %}"></script>
+
+<!-- Put App.js last in your javascript imports -->
+<script src="{% static "design/js/jquery.validate.min.js" %}"></script>
+<script src="{% static "design/js/additional-methods.min.js" %}"></script>
+<script src="{% static "design/js/App.min.js" %}"></script>
+<script src="{% static "design/js/mainv2.js" %}"></script>
+    <script type="text/javascript">
+    (function($) {
+    $.fn.flash_message = function(options) {      
+      options = $.extend({
+        text: 'Done',
+        time: 2000,
+        how: 'before',
+        class_name: ''
+      }, options);
+      
+      return $(this).each(function() {
+        if( $(this).parent().find('.flash_message').get(0) )
+          return;
+        
+        var message = $('<span />', {
+          'class': 'flash_message ' + options.class_name,
+          text: options.text
+        }).hide().fadeIn('fast');
+        
+        $(this)[options.how](message);
+        
+        message.delay(options.time).fadeOut('normal', function() {
+          $(this).remove();
+        });
+        
+      });
+    };
+})(jQuery);
+
+
+    $(document).ready(function(){
+    $("#reset").click(function(){
+        mobile_number = document.getElementById('input_mobile_number').value;
+            if(mobile_number == '' || mobile_number == 0)
+            {
+                alert('Please Enter Your Mobile Number.')
+                document.getElementById('input_mobile_number').focus();
+                return false;
+            }
+        $.ajax({            
+            url: "/user/view/reset-password/",
+            type: "post",
+            data: {"mobile_number":mobile_number},success: function(response) {
+                if(response.errors == '')
+                {
+                    $('#success-area').flash_message({
+                       text: response.success,
+                      how: 'append'
+                     });
+                }else
+                {
+                    $('#errors-area').flash_message({
+                            text: response.errors,
+                            how: 'append'
+                         });
+                }
+                
+            },failure: function(response) {
+                $('#errors-area').flash_message({
+                    text: response.errors,
+                    how: 'append'
+                 });
+            }
+            });   
+    });
+});
+      
+    </script>
+</body>
+
+</html>

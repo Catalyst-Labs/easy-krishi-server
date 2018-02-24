@@ -1,0 +1,57 @@
+<style>
+ul.pagination {
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+}
+
+ul.pagination li {display: inline;}
+
+ul.pagination li a {
+    color: #337ab7;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+    transition: background-color .3s;
+    border: 1px solid #ddd;
+}
+
+ul.pagination li a.active {
+    background-color: #0088CC;
+    color: white;
+    border: 1px solid #4CAF50;
+}
+ul.pagination li a:hover:not(.active) {background-color: #0088CC;}
+
+</style>
+<div class="" align="center">
+  <ul class="pagination" style="border-radius: 36px;">
+   {% if page_obj.has_previous %}
+      <li><a href="?page={{ page_obj.previous_page_number }}">&laquo; </a></li>
+   {% else %}
+      <li class="disabled"><a href="#">&laquo;</a></li>
+    {% endif %}
+
+   {% if page_obj.show_first %}
+      <li><a href="?page=1">1</a></li>
+      <li><a href="#">...</a></li>
+   {% endif %}
+   {% for linkpage in page_obj.page_numbers %}
+      {% ifequal linkpage page_obj.number %}
+         <li><a href="#" class="active">{{ linkpage }}</a></li>
+      {% else %}
+         <li><a href="?page={{ linkpage }}"
+               >{{ linkpage }}</a></li>
+      {% endifequal %}
+   {% endfor %}
+   {% if page_obj.show_last %}
+      <li><a href="#">...</a></li>
+      <li><a href="?page={{ paginator.num_pages }}">{{ paginator.num_pages }}</a></li>
+   {% endif %}
+   {% if page_obj.has_next %}
+      <li><a href="?page={{ page_obj.next_page_number }}"> &raquo;</a></li>
+  {% else %}
+      <li class="disabled"><a href="#">&raquo;</a></li>
+    {% endif %}   
+   </ul>
+</div>
