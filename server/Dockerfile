@@ -1,4 +1,5 @@
-FROM ubuntu:16.04
+FROM python:3-stretch
+# FROM ubuntu:16.04
 
 ENV DEV 1
 
@@ -6,7 +7,7 @@ RUN apt-get update && \
 	apt-get install -y \
 		mysql-client \
 		python-pip \
-		libmysqlclient-dev \
+		default-libmysqlclient-dev \
 		build-essential \
 		python-dev 
 
