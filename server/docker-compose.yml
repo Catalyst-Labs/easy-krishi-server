@@ -10,6 +10,12 @@ services:
     volumes:
       - $PRJ_HOME/easykrishi_server:/server
       - $PRJ_HOME/docker_scripts:/scripts
+    ports:
+      - 8000:8000
+    external_links:
+      - easykrishi_database:easykrishi_database
+    #extra_hosts:
+    #  - easykrishi_database:easykrishi_database
 
   easykrishi_database:
     image: mysql:5.7.21
@@ -17,6 +23,9 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: easykrishi
+      #MYSQL_DATABASE: easykrishi
+      #MYSQL_USER: easykrishi
+      #MYSQL_PASSWORD: easykrishi_pwd
     volumes:
-      - $PWD/mysql_data:/var/lib/mysql
+      - $PRJ_HOME/mysql_data:/var/lib/mysql
 

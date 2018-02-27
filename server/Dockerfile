@@ -1,4 +1,4 @@
-FROM python:3-stretch
+FROM python:2-stretch
 # FROM ubuntu:16.04
 
 ENV DEV 1

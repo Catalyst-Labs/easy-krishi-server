@@ -14,7 +14,6 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 import os
 from config import *
 
-
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATIC_PATH = os.path.join(BASE_DIR, 'static')
@@ -33,7 +32,7 @@ SECRET_KEY = '_i&5)$suq9#n$g*!k^*0&vd^=l@xuv)c=2%%9rv$65hsda_ot+'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 TEMPLATE_DEBUG = False
-ALLOWED_HOSTS = ['localhost','127.0.0.1','www.easykrishi.com']
+ALLOWED_HOSTS = ['localhost','127.0.0.1','www.easykrishi.com','easykrishi_server']
 
 
 AUTH_USER_MODEL = 'userinfo.User'
@@ -128,7 +127,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = False
+USE_TZ = True
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
