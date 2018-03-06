@@ -2,6 +2,7 @@ from django.shortcuts import render, render_to_response
 from django.template import Context, Template,RequestContext
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 from django.http import HttpResponseRedirect,HttpResponse
 from django.template.loader import get_template
 from django.shortcuts import render,redirect
@@ -47,7 +48,7 @@ def DashboardView(request):
 	else:
 		return HttpResponseRedirect('/login/')
 
-@login_required(login_url="/login/")
+
 class PeopleChooseList(ListView):
 	"""
 		Here,we will get Group Members Based On Selected Group
@@ -61,6 +62,10 @@ class PeopleChooseList(ListView):
 
 	def get_queryset(self):
 		return UserPeople.objects.filter(people=self.kwargs.get('people'))
+
+	@method_decorator(login_required)
+	def dispatch(self, *args, **kwargs):
+		return super(PeopleChooseList, self).dispatch(*args, **kwargs)
 
 
 def get_leaders_list_data(queryset):
