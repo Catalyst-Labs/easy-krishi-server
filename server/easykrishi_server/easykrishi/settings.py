@@ -18,8 +18,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATIC_PATH = os.path.join(BASE_DIR, 'static')
 TEMPLATE_PATH = os.path.join(BASE_DIR, 'templates')
-domain = "https://www.easykrishi.com/"
-IMAGE_BASE_URL = domain + 'images/'
+# domain = "https://www.easykrishi.com/"
+IMAGE_BASE_URL = '/images/'
 
 
 
@@ -30,7 +30,8 @@ IMAGE_BASE_URL = domain + 'images/'
 SECRET_KEY = '_i&5)$suq9#n$g*!k^*0&vd^=l@xuv)c=2%%9rv$65hsda_ot+'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+#DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = False
 ALLOWED_HOSTS = ['localhost','127.0.0.1','www.easykrishi.com','easykrishi_server']
 

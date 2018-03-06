@@ -33,7 +33,7 @@ def deploy(user,password,db):
         #local('pkill gunicorn')
         local('python manage.py makemigrations')
         local('python manage.py migrate')
-        local('gunicorn easykrishi.wsgi:application --bind=0.0.0.0:8000 --workers=4 ')
+        local('gunicorn easykrishi.wsgi:application --bind=0.0.0.0:8000 --workers=4 --access-logfile /dev/stdout --error-log /dev/stderr')
 
 def my_site(user,password,db):    
     env.key_filename = "/home/ubuntu/public.pem"

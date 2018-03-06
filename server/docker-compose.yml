@@ -11,7 +11,7 @@ services:
       - $PRJ_HOME/easykrishi_server:/server
       - $PRJ_HOME/docker_scripts:/scripts
     ports:
-      - 8000:8000
+      - 80:80
     external_links:
       - easykrishi_database:easykrishi_database
     #extra_hosts:

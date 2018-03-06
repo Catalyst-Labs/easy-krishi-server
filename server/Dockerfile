@@ -9,7 +9,8 @@ RUN apt-get update && \
 		python-pip \
 		default-libmysqlclient-dev \
 		build-essential \
-		python-dev 
+		python-dev \
+		nginx 
 
 WORKDIR /server
 # COPY easykrishi_server/ /server
