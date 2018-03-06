@@ -1,6 +1,7 @@
 from django.shortcuts import render, render_to_response
 from django.conf import settings
 from django.views.generic import TemplateView,ListView
+from django.utils.decorators import method_decorator
 from django.contrib.auth.models import User,Group
 from userinfo.models import *
 from groups.models import *
@@ -10,7 +11,6 @@ import pdb
 import datetime
 from django.contrib.auth.decorators import login_required
 
-@login_required(login_url="/login/")
 class TChooseList(ListView):
 	"""
 		Here,we will get Group Members Based On Selected Group
@@ -24,6 +24,10 @@ class TChooseList(ListView):
 
 	def get_queryset(self):
 		return Groupmember.objects.filter(member=self.kwargs.get('people'),user_group=self.kwargs.get('group'))
+
+	@method_decorator(login_required)
+	def dispatch(self, *args, **kwargs):
+		return super(TChooseList, self).dispatch(*args, **kwargs)
 
 from groups.tables import *
 def get_groups_list_queryset(request):				
@@ -167,7 +171,6 @@ def leader_group_member_list(request,group):
 	group_member_list_data = GroupmemberLeaderTable(query_set_values)
 	return render(request, "app/dist/html/table/leaders/leadergroupmemberslist.html/", {'group_member_list_data': group_member_list_data,'info_data':info_data})
 
-@login_required(login_url="/login/")
 class TLeaderChooseList(ListView):
 	"""
 		Here,we will get Group Members Based On Selected Group
@@ -181,6 +184,10 @@ class TLeaderChooseList(ListView):
 
 	def get_queryset(self):
 		return Groupmember.objects.filter(member=self.kwargs.get('people'),user_group=self.kwargs.get('group'))
+
+	@method_decorator(login_required)
+	def dispatch(self, *args, **kwargs):
+		return super(TLeaderChooseList, self).dispatch(*args, **kwargs)
 
 ####################################################################################
 def get_leaders_order_list_queryset(people,group):
